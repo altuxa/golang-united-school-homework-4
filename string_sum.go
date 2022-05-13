@@ -29,7 +29,7 @@ func StringSum(input string) (output string, err error) {
 	sl := []string{}
 	num := ""
 	zn := []string{}
-	mp := make(map[int]string)
+	// mp := make(map[int]string)
 	check := false
 	num1 := 0
 	num2 := 0
@@ -62,7 +62,7 @@ func StringSum(input string) (output string, err error) {
 			num = num + string(a[i])
 		} else if a[i] < '0' || a[i] > '9' {
 			zn = append(zn, string(a[i]))
-			mp[i] = string(a[i])
+			// mp[i] = string(a[i])
 			if i == 0 {
 				check = true
 			}
@@ -77,9 +77,29 @@ func StringSum(input string) (output string, err error) {
 	}
 	if check == true {
 		num1, _ = strconv.Atoi(zn[0] + sl[0])
+		if len(zn) == 2 {
+			num2, _ = strconv.Atoi(sl[1])
+			if zn[1] == "+" {
+				res = num1 + num2
+			} else if zn[1] == "-" {
+				res = num1 - num2
+			}
+		}
 	}
-	if len(zn) == 2 {
-		num2, _ = strconv.Atoi(sl[1])
+	if check == false {
+		num1, _ = strconv.Atoi(sl[0])
+		if len(zn) == 2 {
+			num2, _ = strconv.Atoi(zn[1] + sl[1])
+			if zn[0] == "+" {
+				res = num1 + num2
+			} else if zn[0] == "-" {
+				res = num1 - num2
+			}
+		}
+	}
+
+	if len(zn) == 3 {
+		num2, _ = strconv.Atoi(zn[2] + sl[1])
 		if zn[1] == "+" {
 			res = num1 + num2
 		} else if zn[1] == "-" {
@@ -88,7 +108,7 @@ func StringSum(input string) (output string, err error) {
 	}
 	fmt.Println(num1)
 	fmt.Println(num2)
-	fmt.Println(mp)
+	// fmt.Println(mp)
 	fmt.Println(zn)
 	fmt.Println(sl)
 	return strconv.Itoa(res), nil
