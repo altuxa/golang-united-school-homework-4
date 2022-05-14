@@ -80,66 +80,33 @@ func StringSum(input string) (output string, err error) {
 		return "", fmt.Errorf("%w", errorNotTwoOperands)
 	}
 	if len(zn) == 1 {
-		num1, err = strconv.Atoi(operands[0])
-		if err != nil {
-			return "", fmt.Errorf("%w", err)
-		}
-		num2, err = strconv.Atoi(operands[1])
-		if err != nil {
-			return "", fmt.Errorf("%w", err)
-		}
-		if zn[0] == "+" {
-			res = num1 + num2
-		} else if zn[0] == "-" {
-			res = num1 - num2
-		}
-		output = strconv.Itoa(res)
-		return output, nil
+		zn = append(zn, "")
+		zn = append(zn, "")
+		zn[1] = zn[0]
+		zn[0] = ""
+		zn[2] = ""
 	}
-	if check == true {
-		num1, err = strconv.Atoi(zn[0] + operands[0])
-		if err != nil {
-			return "", fmt.Errorf("%w", err)
-		}
-		if len(zn) == 2 {
-			num2, err = strconv.Atoi(operands[1])
-			if err != nil {
-				return "", fmt.Errorf("%w", err)
-			}
-			if zn[1] == "+" {
-				res = num1 + num2
-			} else if zn[1] == "-" {
-				res = num1 - num2
-			}
-		}
+	if check && len(zn) == 2 {
+		zn = append(zn, "")
+	} else if !check && len(zn) == 2 {
+		zn = append(zn, "")
+		zn[2] = zn[1]
+		zn[1] = zn[0]
+		zn[0] = ""
 	}
-	if check == false {
-		num1, err = strconv.Atoi(operands[0])
-		if err != nil {
-			return "", fmt.Errorf("%w", err)
-		}
-		if len(zn) == 2 {
-			num2, err = strconv.Atoi(zn[1] + operands[1])
-			if err != nil {
-				return "", fmt.Errorf("%w", err)
-			}
-			if zn[0] == "+" {
-				res = num1 + num2
-			} else if zn[0] == "-" {
-				res = num1 - num2
-			}
-		}
+
+	num1, err = strconv.Atoi(zn[0] + operands[0])
+	if err != nil {
+		return "", fmt.Errorf("%w", err)
 	}
-	if len(zn) == 3 {
-		num2, err = strconv.Atoi(zn[2] + operands[1])
-		if err != nil {
-			return "", fmt.Errorf("%w", err)
-		}
-		if zn[1] == "+" {
-			res = num1 + num2
-		} else if zn[1] == "-" {
-			res = num1 - num2
-		}
+	num2, err = strconv.Atoi(zn[2] + operands[1])
+	if err != nil {
+		return "", fmt.Errorf("%w", err)
+	}
+	if zn[1] == "+" {
+		res = num1 + num2
+	} else if zn[1] == "-" {
+		res = num1 - num2
 	}
 	output = strconv.Itoa(res)
 	return output, nil
