@@ -24,22 +24,34 @@ var (
 //
 // Use the errors defined above as described, again wrapping into fmt.Errorf
 
-func StringSum(input string) (output string, err error) {
+func DeleteWhitespace(s string) (string, error) {
 	a := ""
-	sl := []string{}
-	num := ""
-	zn := []string{}
-	check := false
-	num1 := 0
-	num2 := 0
-	res := 0
-	for _, i := range input {
+	for _, i := range s {
 		if i != 32 {
 			a = a + string(i)
 		}
 	}
 	if len(a) == 0 {
 		return "", fmt.Errorf("%w", errorEmptyInput)
+	}
+	return a, nil
+}
+
+func ValidNumberOfOperands(n int) bool {
+	return n == 2
+}
+
+func StringSum(input string) (output string, err error) {
+	operands := []string{}
+	num := ""
+	zn := []string{}
+	check := false
+	num1 := 0
+	num2 := 0
+	res := 0
+	a, err := DeleteWhitespace(input)
+	if err != nil {
+		return "", fmt.Errorf("%w", err)
 	}
 	for i := 0; i < len(a); i++ {
 		if a[i] != '+' && a[i] != '-' {
@@ -50,26 +62,24 @@ func StringSum(input string) (output string, err error) {
 				check = true
 			}
 			if num != "" {
-				sl = append(sl, num)
+				operands = append(operands, num)
 				num = ""
 			}
 		}
 	}
 	if num != "" {
-		sl = append(sl, num)
+		operands = append(operands, num)
 	}
-	if len(sl) < 2 {
-		return "", fmt.Errorf("%w", errorNotTwoOperands)
-	}
-	if len(sl) > 2 {
+	valid := ValidNumberOfOperands(len(operands))
+	if !valid {
 		return "", fmt.Errorf("%w", errorNotTwoOperands)
 	}
 	if len(zn) == 1 {
-		num1, err = strconv.Atoi(sl[0])
+		num1, err = strconv.Atoi(operands[0])
 		if err != nil {
 			return "", fmt.Errorf("%w", err)
 		}
-		num2, err = strconv.Atoi(sl[1])
+		num2, err = strconv.Atoi(operands[1])
 		if err != nil {
 			return "", fmt.Errorf("%w", err)
 		}
@@ -82,12 +92,12 @@ func StringSum(input string) (output string, err error) {
 		return output, nil
 	}
 	if check == true {
-		num1, err = strconv.Atoi(zn[0] + sl[0])
+		num1, err = strconv.Atoi(zn[0] + operands[0])
 		if err != nil {
 			return "", fmt.Errorf("%w", err)
 		}
 		if len(zn) == 2 {
-			num2, err = strconv.Atoi(sl[1])
+			num2, err = strconv.Atoi(operands[1])
 			if err != nil {
 				return "", fmt.Errorf("%w", err)
 			}
@@ -99,12 +109,12 @@ func StringSum(input string) (output string, err error) {
 		}
 	}
 	if check == false {
-		num1, err = strconv.Atoi(sl[0])
+		num1, err = strconv.Atoi(operands[0])
 		if err != nil {
 			return "", fmt.Errorf("%w", err)
 		}
 		if len(zn) == 2 {
-			num2, err = strconv.Atoi(zn[1] + sl[1])
+			num2, err = strconv.Atoi(zn[1] + operands[1])
 			if err != nil {
 				return "", fmt.Errorf("%w", err)
 			}
@@ -115,9 +125,8 @@ func StringSum(input string) (output string, err error) {
 			}
 		}
 	}
-
 	if len(zn) == 3 {
-		num2, err = strconv.Atoi(zn[2] + sl[1])
+		num2, err = strconv.Atoi(zn[2] + operands[1])
 		if err != nil {
 			return "", fmt.Errorf("%w", err)
 		}
