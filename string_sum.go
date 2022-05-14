@@ -41,18 +41,11 @@ func ValidNumberOfOperands(n int) bool {
 	return n == 2
 }
 
-func StringSum(input string) (output string, err error) {
+func SplittingExpression(a string) ([]string, []string, bool) {
 	operands := []string{}
 	num := ""
 	zn := []string{}
 	check := false
-	num1 := 0
-	num2 := 0
-	res := 0
-	a, err := DeleteWhitespace(input)
-	if err != nil {
-		return "", fmt.Errorf("%w", err)
-	}
 	for i := 0; i < len(a); i++ {
 		if a[i] != '+' && a[i] != '-' {
 			num = num + string(a[i])
@@ -70,6 +63,18 @@ func StringSum(input string) (output string, err error) {
 	if num != "" {
 		operands = append(operands, num)
 	}
+	return operands, zn, check
+}
+
+func StringSum(input string) (output string, err error) {
+	num1 := 0
+	num2 := 0
+	res := 0
+	a, err := DeleteWhitespace(input)
+	if err != nil {
+		return "", fmt.Errorf("%w", err)
+	}
+	operands, zn, check := SplittingExpression(a)
 	valid := ValidNumberOfOperands(len(operands))
 	if !valid {
 		return "", fmt.Errorf("%w", errorNotTwoOperands)
